@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
-	import { isAuthenticated } from '../../store';
 	import { sidebarLinks } from '../links';
+	import { auth } from '../../auth/authService';
+
+	let { isAuthenticated } = auth;
 
 	// Reactive
 	$: tileSelected = (href: string) => $page.url.pathname?.includes(href);

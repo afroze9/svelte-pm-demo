@@ -1,22 +1,30 @@
 import { Auth0Client, createAuth0Client, type PopupLoginOptions } from "@auth0/auth0-spa-js";
-import { user, isAuthenticated, popupOpen } from "../store";
 import config from './auth_config';
+import { writable, get } from "svelte/store";
 
-async function createClient(): Promise<Auth0Client> {
-  let auth0Client = await createAuth0Client({
-    domain: config.domain,
-    clientId: config.clientId
-  });
-
-  return auth0Client;
+type User = {
+  email?: string;
+  name?: string;
 }
 
-async function loginWithPopup(client: Auth0Client, options?: PopupLoginOptions) {
+const isAuthenticated = writable<boolean>(false);
+const user = writable<User | undefined>({});
+const popupOpen = writable<boolean>(false);
+const error = writable();
+const auth0Client = writable<Auth0Client>();
+
+async function initClient(): Promise<void> {
+  let client = await createAuth0Client(config);
+  auth0Client.set(client);
+  isAuthenticated.set(await client.isAuthenticated());
+  user.set(await client.getUser());
+}
+
+async function login() {
   popupOpen.set(true);
   try {
-    await client.loginWithPopup(options);
-
-    user.set(await client.getUser());
+    await get(auth0Client).loginWithPopup();
+    user.set(await get(auth0Client).getUser());
     isAuthenticated.set(true);
   } catch (e) {
     // eslint-disable-next-line
@@ -26,14 +34,20 @@ async function loginWithPopup(client: Auth0Client, options?: PopupLoginOptions) 
   }
 }
 
-function logout(client: Auth0Client) {
-  return client.logout();
+function logout() {
+  return get(auth0Client).logout({
+    logoutParams: {
+      returnTo: window.location.origin
+    }
+  });
 }
 
-const auth = {
-  createClient,
-  loginWithPopup,
-  logout
+export const auth = {
+  initClient,
+  login,
+  logout,
+  auth0Client,
+  isAuthenticated,
+  user,
+  error
 };
-
-export default auth;

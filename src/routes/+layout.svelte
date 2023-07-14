@@ -3,30 +3,16 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-	import Sidebar from '$lib/components/Sidebar.svelte';
-	import { LightSwitch } from '@skeletonlabs/skeleton';
-
+	import { AppShell, AppBar, LightSwitch } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
-	import auth from '../auth/authService';
-	import { isAuthenticated, user } from '../store';
-	import type { Auth0Client } from '@auth0/auth0-spa-js';
+	import Sidebar from '$lib/components/Sidebar.svelte';
+	import { auth } from '../auth/authService';
 
-	let auth0Client: Auth0Client;
+	let { isAuthenticated, login, logout, user, initClient } = auth;
 
 	onMount(async () => {
-		auth0Client = await auth.createClient();
-		isAuthenticated.set(await auth0Client.isAuthenticated());
-		user.set(await auth0Client.getUser());
+		await initClient();
 	});
-
-	function login() {
-		auth.loginWithPopup(auth0Client);
-	}
-
-	function logout() {
-		auth.logout(auth0Client);
-	}
 </script>
 
 <svelte:head>
