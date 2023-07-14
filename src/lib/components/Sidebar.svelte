@@ -1,19 +1,22 @@
 <script lang="ts">
 	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
-	let currentTile: number = 0;
+	import { page } from '$app/stores';
+	import { isAuthenticated } from '../../store';
+	import { sidebarLinks } from '../links';
+
+	// Reactive
+	$: tileSelected = (href: string) => $page.url.pathname?.includes(href);
 </script>
 
 <AppRail>
-	<AppRailAnchor href="/companies">
-		<svelte:fragment slot="lead">
-			<i class="fa-solid fa-building text-2xl" />
-		</svelte:fragment>
-		<span>Companies</span>
-	</AppRailAnchor>
-	<AppRailAnchor href="/projects">
-		<svelte:fragment slot="lead">
-			<i class="fa-solid fa-diagram-project text-2xl" />
-		</svelte:fragment>
-		<span>Projects</span>
-	</AppRailAnchor>
+	{#if $isAuthenticated}
+		{#each sidebarLinks as sidebarLink}
+			<AppRailAnchor href={sidebarLink.href} selected={tileSelected(sidebarLink.href)}>
+				<svelte:fragment slot="lead">
+					<i class={`fa-solid ${sidebarLink.icon} text-2xl`} />
+				</svelte:fragment>
+				<span>{sidebarLink.label}</span>
+			</AppRailAnchor>
+		{/each}
+	{/if}
 </AppRail>
