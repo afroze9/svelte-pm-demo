@@ -1,23 +1,17 @@
 import { Auth0Client, createAuth0Client, type PopupLoginOptions } from "@auth0/auth0-spa-js";
 import config from './auth_config';
 import { writable, get } from "svelte/store";
-
-type User = {
-  email?: string;
-  name?: string;
-}
-
-const isAuthenticated = writable<boolean>(false);
-const user = writable<User | undefined>({});
-const popupOpen = writable<boolean>(false);
-const error = writable();
-const auth0Client = writable<Auth0Client>();
+import { auth0Client, isAuthenticated, isLoading, popupOpen, user } from "../store";
 
 async function initClient(): Promise<void> {
+  isLoading.set(true);
+
   let client = await createAuth0Client(config);
   auth0Client.set(client);
   isAuthenticated.set(await client.isAuthenticated());
   user.set(await client.getUser());
+
+  isLoading.set(false);
 }
 
 async function login() {
@@ -45,9 +39,5 @@ function logout() {
 export const auth = {
   initClient,
   login,
-  logout,
-  auth0Client,
-  isAuthenticated,
-  user,
-  error
+  logout
 };

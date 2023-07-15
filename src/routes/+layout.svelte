@@ -3,12 +3,13 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
-	import { AppShell, AppBar, LightSwitch } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, LightSwitch, ProgressRadial } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { auth } from '../auth/authService';
+	import { isAuthenticated, isLoading, user } from '../store';
 
-	let { isAuthenticated, login, logout, user, initClient } = auth;
+	let { login, logout, initClient } = auth;
 
 	onMount(async () => {
 		await initClient();
@@ -47,5 +48,9 @@
 		<Sidebar />
 	</svelte:fragment>
 
-	<slot />
+	{#if $isLoading}
+		<div class="grid h-screen place-items-center"><ProgressRadial /></div>
+	{:else}
+		<slot />
+	{/if}
 </AppShell>

@@ -3,8 +3,7 @@
 	import { page } from '$app/stores';
 	import { sidebarLinks } from '../layouts/links';
 	import { auth } from '../../auth/authService';
-
-	let { isAuthenticated } = auth;
+	import { isAuthenticated } from '../../store';
 
 	// Reactive
 	$: tileSelected = (href: string) => $page.url.pathname?.includes(href);
