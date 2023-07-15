@@ -42,6 +42,7 @@
 	"type": "module",
 	"dependencies": {
 		"@auth0/auth0-spa-js": "^2.1.0",
-		"axios": "^1.4.0"
+		"axios": "^1.4.0",
+		"svelte-forms": "^2.3.1"
 	}
 }

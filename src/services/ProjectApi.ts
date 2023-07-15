@@ -11,6 +11,14 @@ export type ProjectResponse = {
   priority: Priority;
 }
 
+export type ProjectSummaryResponseModel = {
+  id: number;
+  companyId: number;
+  name: string;
+  taskCount: number;
+}
+
+
 export enum Priority {
   Low = 1,
   Medium = 2,

@@ -1,0 +1,76 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import LayoutPage from '$lib/layouts/LayoutPage.svelte';
+	import { writable } from 'svelte/store';
+	import type { CompanyResponse, CompanySummaryResponseModel } from '../../../services/CompanyApi';
+	import { onMount } from 'svelte';
+	import { form, field } from 'svelte-forms';
+	import { min, required } from 'svelte-forms/validators';
+	import companyApi from '../../../services/CompanyApi';
+	import ApiHelpers from '../../../services/ApiHelpers';
+	import { ProgressRadial } from '@skeletonlabs/skeleton';
+
+	let id: number = +$page.params.id;
+	let company = writable<CompanyResponse>();
+
+	const name = field('name', '', [required(), min(5)], {
+		validateOnChange: true
+	});
+	const myForm = form(name);
+
+	onMount(async () => {
+		let fetchedCompany = await companyApi.getCompanyById(id);
+
+		if (!ApiHelpers.isErrorReponse(fetchedCompany)) {
+			company.set(fetchedCompany);
+			name.set(fetchedCompany.name);
+		}
+	});
+
+	$: getValidationClass = (checks: string[]): string => {
+		return checks.some((check) => $myForm.hasError(check)) ? 'input-error' : '';
+	};
+</script>
+
+<LayoutPage>
+	{#if $company}
+		<h3 class="h3">{$company.name}</h3>
+
+		<label class="label">
+			<span>Name</span>
+			<input
+				class={`input ${getValidationClass(['name.required', 'name.min'])}`}
+				type="text"
+				placeholder="Company Name"
+				bind:value={$name.value}
+			/>
+		</label>
+		<div class="flex justify-end">
+			<a class="btn variant-filled-error" href="/company">Cancel</a>
+			<button type="button" class="btn variant-filled ml-4" disabled={!$myForm.valid}>Update</button
+			>
+		</div>
+		<h3 class="h3">Projects</h3>
+		{#if $company.projects}
+			{#each $company.projects as project}
+				<div class="card p-1">
+					<div class="flex">
+						<div class="flex flex-col">
+							<header class="card-header">{project.name}</header>
+							<section class="p-4">
+								<div>Tasks: {project.taskCount}</div>
+							</section>
+						</div>
+						<div class="flex items-center justify-center ml-auto p-4">
+							<button type="button" class="btn variant-filled ml-4">View</button>
+						</div>
+					</div>
+				</div>
+			{/each}
+		{:else}
+			<p>No Projects</p>
+		{/if}
+	{:else}
+		<div class="grid h-screen place-items-center"><ProgressRadial /></div>
+	{/if}
+</LayoutPage>

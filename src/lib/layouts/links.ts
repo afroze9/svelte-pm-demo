@@ -7,12 +7,12 @@ type Sidebarlink = {
 export const sidebarLinks: Array<Sidebarlink> = [
   {
     label: 'Companies',
-    href: '/companies',
+    href: '/company',
     icon: 'fa-building'
   },
   {
     label: 'Projects',
-    href: '/projects',
+    href: '/project',
     icon: 'fa-diagram-project'
   }
 ]
