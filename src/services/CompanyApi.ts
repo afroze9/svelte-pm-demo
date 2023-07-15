@@ -1,5 +1,4 @@
 import { get } from 'svelte/store';
-import { auth } from '../auth/authService';
 import axios from 'axios';
 import ApiHelpers, { type ErrorResponse } from './ApiHelpers'
 import { auth0Client } from '../store';

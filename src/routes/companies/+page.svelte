@@ -1,8 +1,5 @@
 <script lang="ts">
 	import LayoutPage from '$lib/layouts/LayoutPage.svelte';
-	import { Table } from '@skeletonlabs/skeleton';
-	import type { TableSource } from '@skeletonlabs/skeleton';
-	import { tableMapperValues } from '@skeletonlabs/skeleton';
 	import companyApi, { type CompanySummaryResponseModel } from '../../services/CompanyApi';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
@@ -43,7 +40,7 @@
 						<td>{company.projectCount}</td>
 						<td>{company.tags}</td>
 						<td>
-							<a href={`company/${company.id}`} class="text-secondary-500">
+							<a href={`company/${company.id}`}>
 								<i class="fa-solid fa-pencil" />
 							</a>
 							<a href="/" class="ml-2 text-error-500">
