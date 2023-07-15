@@ -31,13 +31,13 @@
 				<LightSwitch />
 				{#if $isAuthenticated}
 					<span>{$user?.name}</span>
-					<a class="btn btn-sm variant-ghost-surface" on:click={logout} on:keypress={logout}>
+					<button class="btn btn-sm variant-filled" on:click={logout} on:keypress={logout}>
 						Logout
-					</a>
+					</button>
 				{:else}
-					<a class="btn btn-sm variant-ghost-surface" on:click={login} on:keypress={login}>
+					<button class="btn btn-sm variant-filled" on:click={login} on:keypress={login}>
 						Login
-					</a>
+					</button>
 				{/if}
 			</svelte:fragment>
 		</AppBar>

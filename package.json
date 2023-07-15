@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@auth0/auth0-spa-js": "^2.1.0"
+		"@auth0/auth0-spa-js": "^2.1.0",
+		"axios": "^1.4.0"
 	}
 }

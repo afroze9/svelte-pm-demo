@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { AppRail, AppRailAnchor } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
-	import { sidebarLinks } from '../links';
+	import { sidebarLinks } from '../layouts/links';
 	import { auth } from '../../auth/authService';
 
 	let { isAuthenticated } = auth;
