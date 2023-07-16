@@ -18,6 +18,16 @@ export type CompanyResponse = {
   tags: TagResponseModel[];
 }
 
+export type CompanyRequest = {
+  name: string;
+  tags: string[];
+}
+
+export type UpdateCompanyRequest = {
+  id: number;
+  name: string;
+}
+
 export type TagResponseModel = {
   id: number;
   name: string;
@@ -52,9 +62,58 @@ async function getCompanyById(id: number): Promise<CompanyResponse | ErrorRespon
     };
   }
 }
+
+async function createCompany(company: CompanyRequest) {
+  try {
+    const token = await get(auth0Client).getTokenSilently();
+    const url = ApiHelpers.getUrl(`/company`);
+    const config = ApiHelpers.getAxiosConfig(token);
+    const response = await axios.post<CompanyResponse>(url, company, config);
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return {
+      message: (e as any).toString()
+    };
+  }
+}
+
+async function updateCompany(id: number, company: UpdateCompanyRequest) {
+  try {
+    const token = await get(auth0Client).getTokenSilently();
+    const url = ApiHelpers.getUrl(`/company/${id}`);
+    const config = ApiHelpers.getAxiosConfig(token);
+    const response = await axios.put<CompanyResponse>(url, company, config);
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return {
+      message: (e as any).toString()
+    };
+  }
+}
+
+async function deleteCompany(id: number) {
+  try {
+    const token = await get(auth0Client).getTokenSilently();
+    const url = ApiHelpers.getUrl(`/company/${id}`);
+    const config = ApiHelpers.getAxiosConfig(token);
+    const response = await axios.delete<CompanyResponse>(url, config);
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return {
+      message: (e as any).toString()
+    };
+  }
+}
+
 const companyApi = {
   getCompanies,
-  getCompanyById
+  getCompanyById,
+  createCompany,
+  updateCompany,
+  deleteCompany
 }
 
 export default companyApi;

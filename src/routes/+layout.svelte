@@ -8,6 +8,7 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { auth } from '../auth/authService';
 	import { isAuthenticated, isLoading, user } from '../store';
+	import Loader from '$lib/components/Loader.svelte';
 
 	let { login, logout, initClient } = auth;
 
@@ -49,7 +50,7 @@
 	</svelte:fragment>
 
 	{#if $isLoading}
-		<div class="grid h-screen place-items-center"><ProgressRadial /></div>
+		<Loader />
 	{:else}
 		<slot />
 	{/if}

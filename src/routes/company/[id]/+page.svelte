@@ -9,6 +9,7 @@
 	import companyApi from '../../../services/CompanyApi';
 	import ApiHelpers from '../../../services/ApiHelpers';
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { goto } from '$app/navigation';
 
 	let id: number = +$page.params.id;
 	let company = writable<CompanyResponse>();
@@ -16,7 +17,7 @@
 	const name = field('name', '', [required(), min(5)], {
 		validateOnChange: true
 	});
-	const myForm = form(name);
+	const companyForm = form(name);
 
 	onMount(async () => {
 		let fetchedCompany = await companyApi.getCompanyById(id);
@@ -27,8 +28,22 @@
 		}
 	});
 
+	async function updateCompany() {
+		if ($companyForm.valid) {
+			let response = await companyApi.updateCompany(id, {
+				id: id,
+				name: $name.value
+			});
+			if (!ApiHelpers.isErrorReponse(response)) {
+				goto('/company');
+			} else {
+				console.error(response.message);
+			}
+		}
+	}
+
 	$: getValidationClass = (checks: string[]): string => {
-		return checks.some((check) => $myForm.hasError(check)) ? 'input-error' : '';
+		return checks.some((check) => $companyForm.hasError(check)) ? 'input-error' : '';
 	};
 </script>
 
@@ -47,7 +62,11 @@
 		</label>
 		<div class="flex justify-end">
 			<a class="btn variant-filled-error" href="/company">Cancel</a>
-			<button type="button" class="btn variant-filled ml-4" disabled={!$myForm.valid}>Update</button
+			<button
+				type="button"
+				class="btn variant-filled ml-4"
+				disabled={!$companyForm.valid}
+				on:click={updateCompany}>Update</button
 			>
 		</div>
 		<h3 class="h3">Projects</h3>
@@ -62,7 +81,7 @@
 							</section>
 						</div>
 						<div class="flex items-center justify-center ml-auto p-4">
-							<button type="button" class="btn variant-filled ml-4">View</button>
+							<a href={`/project/${project.id}`} class="btn variant-filled ml-4">View</a>
 						</div>
 					</div>
 				</div>
