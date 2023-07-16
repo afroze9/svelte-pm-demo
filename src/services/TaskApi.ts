@@ -30,7 +30,6 @@ async function createTask(projectId: number, todo: CreateTodoItemRequest): Promi
     const response = await axios.post<TodoItem>(url, todo, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };
@@ -45,7 +44,6 @@ async function updateTodo(id: number, todo: UpdateTodoItemModel): Promise<TodoIt
     const response = await await axios.put<TodoItem>(url, todo, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };

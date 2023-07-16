@@ -3,7 +3,7 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
-	import { AppShell, AppBar, LightSwitch, ProgressRadial } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, LightSwitch, ProgressRadial, Toast } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { auth } from '../auth/authService';
@@ -54,4 +54,5 @@
 	{:else}
 		<slot />
 	{/if}
+	<Toast />
 </AppShell>

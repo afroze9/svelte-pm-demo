@@ -41,7 +41,6 @@ async function getCompanies(): Promise<CompanySummaryResponseModel[] | ErrorResp
     const response = await axios.get<CompanySummaryResponseModel[]>(url, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };
@@ -56,7 +55,6 @@ async function getCompanyById(id: number): Promise<CompanyResponse | ErrorRespon
     const response = await axios.get<CompanyResponse>(url, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };
@@ -71,7 +69,6 @@ async function createCompany(company: CompanyRequest) {
     const response = await axios.post<CompanyResponse>(url, company, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };
@@ -86,7 +83,6 @@ async function updateCompany(id: number, company: UpdateCompanyRequest) {
     const response = await axios.put<CompanyResponse>(url, company, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };
@@ -101,7 +97,6 @@ async function deleteCompany(id: number) {
     const response = await axios.delete<CompanyResponse>(url, config);
     return response.data;
   } catch (e) {
-    console.error(e);
     return {
       message: (e as any).toString()
     };

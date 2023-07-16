@@ -5,6 +5,7 @@
 	import companyApi from '../../../services/CompanyApi';
 	import ApiHelpers from '../../../services/ApiHelpers';
 	import { goto } from '$app/navigation';
+	import { toastStore } from '@skeletonlabs/skeleton';
 
 	const name = field('name', '', [required(), min(5)], {
 		validateOnChange: true,
@@ -25,7 +26,10 @@
 			if (!ApiHelpers.isErrorReponse(response)) {
 				goto('/company');
 			} else {
-				console.error(response.message);
+				toastStore.trigger({
+					message: response.message,
+					background: 'variant-filled-error'
+				});
 			}
 		}
 	}

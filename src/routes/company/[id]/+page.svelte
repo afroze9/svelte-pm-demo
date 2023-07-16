@@ -8,7 +8,7 @@
 	import { min, required } from 'svelte-forms/validators';
 	import companyApi from '../../../services/CompanyApi';
 	import ApiHelpers from '../../../services/ApiHelpers';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, toastStore } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
 
 	let id: number = +$page.params.id;
@@ -20,11 +20,16 @@
 	const companyForm = form(name);
 
 	onMount(async () => {
-		let fetchedCompany = await companyApi.getCompanyById(id);
+		let response = await companyApi.getCompanyById(id);
 
-		if (!ApiHelpers.isErrorReponse(fetchedCompany)) {
-			company.set(fetchedCompany);
-			name.set(fetchedCompany.name);
+		if (!ApiHelpers.isErrorReponse(response)) {
+			company.set(response);
+			name.set(response.name);
+		} else {
+			toastStore.trigger({
+				message: response.message,
+				background: 'variant-filled-error'
+			});
 		}
 	});
 
@@ -37,7 +42,10 @@
 			if (!ApiHelpers.isErrorReponse(response)) {
 				goto('/company');
 			} else {
-				console.error(response.message);
+				toastStore.trigger({
+					message: response.message,
+					background: 'variant-filled-error'
+				});
 			}
 		}
 	}

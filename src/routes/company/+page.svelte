@@ -5,6 +5,7 @@
 	import { writable } from 'svelte/store';
 	import ApiHelpers from '../../services/ApiHelpers';
 	import Loader from '$lib/components/Loader.svelte';
+	import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
 	let companies = writable<CompanySummaryResponseModel[]>([]);
 
@@ -14,10 +15,15 @@
 	}
 
 	onMount(async () => {
-		let list = await companyApi.getCompanies();
+		let response = await companyApi.getCompanies();
 
-		if (!ApiHelpers.isErrorReponse(list)) {
-			companies.set(list);
+		if (!ApiHelpers.isErrorReponse(response)) {
+			companies.set(response);
+		} else {
+			toastStore.trigger({
+				message: response.message,
+				background: 'variant-filled-error'
+			});
 		}
 	});
 </script>

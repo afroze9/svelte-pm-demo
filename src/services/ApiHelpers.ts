@@ -2,6 +2,21 @@ export type ErrorResponse = {
   message: string;
 };
 
+export type ValidationError = {
+  attemptedValue: string;
+  customState: string;
+  errorCode: string;
+  errorMessage: string;
+  formattedMessagePlaceholderValues: PropertyError;
+  propertyName: string;
+  severity: number;
+}
+
+export type PropertyError = {
+  propertyName: string;
+  PropertyValue: string;
+}
+
 const baseUrl = 'https://localhost:7068/api/v1';
 
 function getAxiosConfig(token: string) {

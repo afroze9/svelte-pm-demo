@@ -6,7 +6,7 @@
 	import { form, field, style } from 'svelte-forms';
 	import { min, required } from 'svelte-forms/validators';
 	import ApiHelpers from '../../../services/ApiHelpers';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, toastStore } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
 	import projectApi, { Priority, type ProjectResponse } from '../../../services/ProjectApi';
 	import taskApi from '../../../services/TaskApi';
@@ -73,7 +73,10 @@
 			taskForm.reset();
 			$project.todoItems = [...$project.todoItems, response];
 		} else {
-			console.error(response.message);
+			toastStore.trigger({
+				message: response.message,
+				background: 'variant-filled-error'
+			});
 		}
 	}
 
@@ -94,7 +97,10 @@
 				return item;
 			});
 		} else {
-			console.error(response.message);
+			toastStore.trigger({
+				message: response.message,
+				background: 'variant-filled-error'
+			});
 		}
 	}
 
