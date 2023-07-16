@@ -18,11 +18,18 @@ export type ProjectSummaryResponseModel = {
   taskCount: number;
 }
 
+export type UpdateProjectRequest = {
+  id: number;
+  companyId: number;
+  name: string;
+  priority: Priority;
+}
 
 export enum Priority {
   Low = 1,
   Medium = 2,
   High = 3,
+  Critical = 3,
 }
 
 export type TodoItem = {
@@ -48,8 +55,40 @@ async function getProjects(): Promise<ProjectResponse[] | ErrorResponse> {
   }
 }
 
+async function getProjectById(id: number): Promise<ProjectResponse | ErrorResponse> {
+  try {
+    const token = await get(auth0Client).getTokenSilently();
+    const url = ApiHelpers.getUrl(`/project/${id}`);
+    const config = ApiHelpers.getAxiosConfig(token);
+    const response = await axios.get<ProjectResponse>(url, config);
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return {
+      message: (e as any).toString()
+    };
+  }
+}
+
+async function updateProject(id: number, company: UpdateProjectRequest): Promise<ProjectResponse | ErrorResponse> {
+  try {
+    const token = await get(auth0Client).getTokenSilently();
+    const url = ApiHelpers.getUrl(`/project/${id}`);
+    const config = ApiHelpers.getAxiosConfig(token);
+    const response = await axios.put<ProjectResponse>(url, company, config);
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    return {
+      message: (e as any).toString()
+    };
+  }
+}
+
 const projectApi = {
-  getProjects
+  getProjects,
+  getProjectById,
+  updateProject
 }
 
 export default projectApi;
